@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Dia das Mães - Boas Vindas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@400;700&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+    color: #4a2c45;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Container for both views */
+  #app {
+    height: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 15px;
+    position: relative;
+    z-index: 10; /* above hearts */
+  }
+
+  /* Landing page styles */
+  #landing {
+    text-align: center;
+    flex-grow: 1;
+  }
+
+  #landing h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.8rem;
+    margin-bottom: 0.2em;
+    color: #b83b5e;
+    text-shadow: 0 3px 8px rgba(184,59,94,0.7);
+  }
+
+  #landing p {
+    font-size: 1.25rem;
+    margin-bottom: 2em;
+    color: #783f5a;
+    font-weight: 500;
+  }
+
+  #enter-button {
+    background: linear-gradient(45deg, #f48fb1, #c2185b);
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding: 14px 28px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(184,59,94,0.5);
+    transition: all 0.25s ease;
+  }
+
+  #enter-button:hover,
+  #enter-button:focus {
+    background: linear-gradient(45deg, #c2185b, #f48fb1);
+    outline: none;
+    box-shadow: 0 10px 25px rgba(184,59,94,0.75);
+    transform: scale(1.08);
+  }
+
+  /* Tribute page styles */
+  #tribute {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+  }
+
+  #tribute header {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  #tribute header h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.6rem;
+    margin: 0;
+    color: #b83b5e;
+    text-shadow: 0 3px 8px rgba(184,59,94,0.7);
+  }
+
+  #tribute header h2 {
+    font-weight: 400;
+    font-size: 1.6rem;
+    margin-top: 5px;
+    color: #663438;
+    text-shadow: 0 1px 2px rgba(102,52,56,0.4);
+  }
+
+  #tribute main {
+    background: #fff0f6;
+    border-radius: 20px;
+    padding: 25px 20px;
+    margin: 20px 0;
+    box-shadow: 0 8px 23px rgba(184,59,94,0.35);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  #tribute p.message {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    text-align: center;
+    margin: 0 15px 10px 15px;
+    color: #783f5a;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .flower-container {
+    margin: 20px auto 25px;
+    width: 140px;
+    height: 140px;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    filter: drop-shadow(0 0 8px #e91e63aa);
+    transition: filter 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .flower-container:hover,
+  .flower-container:focus {
+    filter: drop-shadow(0 0 12px #e91e63ee);
+    outline: none;
+  }
+
+  /* Heart SVG styling */
+  svg.heart {
+    width: 120px;
+    height: 120px;
+    user-select: none;
+    pointer-events: none;
+    transform-origin: center center;
+    animation: gentle-sway 3s ease-in-out infinite ;
+    fill: url(#heartGradient);
+  }
+
+  @keyframes gentle-sway {
+    0%, 100% {
+      transform: rotate(3deg);
+    }
+    50% {
+      transform: rotate(-3deg);
+    }
+  }
+
+  #tribute footer {
+    font-size: 1rem;
+    color: #ad5d79;
+    text-align: center;
+    margin-bottom: 15px;
+    user-select: none;
+  }
+
+  /* Smaller screen adjustments */
+  @media (max-width: 350px) {
+    #landing h1 {
+      font-size: 3rem;
+    }
+    #landing p {
+      font-size: 1.1rem;
+    }
+    #enter-button {
+      font-size: 1.1rem;
+      padding: 12px 24px;
+    }
+    #tribute main {
+      padding: 18px 15px;
+    }
+    #tribute p.message {
+      font-size: 1.1rem;
+    }
+    #tribute footer {
+      font-size: 0.95rem;
+    }
+  }
+
+  /* Heart sparkles on flower click */
+  .sparkle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #f06292;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    animation: sparkleAnim 1s forwards;
+    filter: drop-shadow(0 0 2px #f06292);
+  }
+
+  @keyframes sparkleAnim {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-30px) scale(0.5);
+    }
+  }
+
+  /* Floating hearts container */
+  #floating-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 5;
+  }
+
+  .floating-heart {
+    position: absolute;
+    color: #e91e63;
+    user-select: none;
+    font-size: 12px;
+    opacity: 0.8;
+    font-weight: 900;
+    animation-name: floatUp;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes floatUp {
+    0% {
+      transform: translateY(0) translateX(0) scale(1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-110vh) translateX(20px) scale(1.5);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="floating-hearts"></div>
+
+<div id="app">
+
+  <!-- Landing page -->
+  <section id="landing" role="main" aria-label="Página inicial de boas vindas">
+  </p>DIA DAS MÃES </p>
+    <button id="enter-button" aria-label="Entrar na homenagem ao Dia das Mães">Entrar na Homenagem</button>
+  </section>
+
+  <!-- Tribute page -->
+  <section id="tribute" role="main" aria-label="Homenagem ao Dia das Mães">
+    <header>
+      <h1>Feliz Dia das Mães</h1>
+      <h2>Com amor e gratidão!</h2>
+    </header>
+    <main>
+      <div class="flower-container" tabindex="0" aria-label="Coração animado simbolizando o amor" role="button">
+        <svg class="heart" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+          <defs>
+            <linearGradient id="heartGradient" x1="32" y1="10" x2="32" y2="54" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#f48fb1"/>
+              <stop offset="1" stop-color="#c2185b"/>
+            </linearGradient>
+          </defs>
+          <path d="M32 58s26-15.66 26-34a11 11 0 0 0-11-11c-6.18 0-7.99 5.61-7.99 5.61S30.31 12 24 12a11 11 0 0 0-11 11c0 18.34 19 34 19 34z" />
+        </svg>
+      </div>
+      <p class="message" aria-live="polite">
+        Hoje celebramos o amor incondicional, a força e a ternura das mães. Obrigado por cada abraço,
+        cada gesto de cuidado e cada palavra de incentivo. Vocês são o coração pulsante da família, nosso porto seguro, nossa inspiração eterna. Feliz Dia das Mães!
+      </p>
+    </main>
+
+    <footer>
+      &copy; Com carinho para todas as mães
+    </footer>
+  </section>
+
+</div>
+
+<script>
+  const enterBtn = document.getElementById('enter-button');
+  const landing = document.getElementById('landing');
+  const tribute = document.getElementById('tribute');
+
+  enterBtn.addEventListener('click', () => {
+    landing.style.display = 'none';
+    tribute.style.display = 'flex';
+    // Set focus to the main content for accessibility
+    tribute.querySelector('main').focus();
+  });
+
+  // Sparkle effect on heart click or keyboard activation
+  const flower = document.querySelector('.flower-container');
+
+  if (flower) {
+    const createSparkle = (x, y) => {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.left = x + 'px';
+      sparkle.style.top = y + 'px';
+      flower.appendChild(sparkle);
+      sparkle.addEventListener('animationend', () => sparkle.remove());
+    };
+
+    flower.addEventListener('click', (e) => {
+      const rect = flower.getBoundingClientRect();
+      const x = e.clientX - rect.left - 5;
+      const y = e.clientY - rect.top - 5;
+      createSparkle(x, y);
+    });
+
+    flower.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        createSparkle(60, 60);
+      }
+    });
+  }
+
+  // Floating hearts animation all over entire viewport
+  const floatingHeartsContainer = document.getElementById('floating-hearts');
+
+  function createFloatingHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('floating-heart');
+    heart.textContent = '❤️';
+
+    // Randomize horizontal start position, size, animation duration and delay
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.fontSize = (Math.random() * 14 + 12) + 'px';
+    heart.style.animationDuration = (6 + Math.random() * 4) + 's';
+    heart.style.animationDelay = '-' + (Math.random() * 6) + 's';
+
+    floatingHeartsContainer.appendChild(heart);
+
+    // Remove heart after animation
+    heart.addEventListener('animationend', () => {
+      heart.remove();
+      createFloatingHeart();
+    });
+  }
+
+  const floatingHeartCount = 40;
+  for (let i = 0; i < floatingHeartCount; i++) {
+    createFloatingHeart();
+  }
+</script>
+
+</body>
+</html>
+</content>
+</create_file>
